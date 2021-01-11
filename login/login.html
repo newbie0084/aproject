@@ -1,0 +1,64 @@
+<!-- login.html -->
+
+{% extends "login/base.html" %}
+
+{% block contents %}
+<script>
+    if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+    }
+</script>
+<div class = 'r_logo'>
+    <table style="margin:auto;margin-top: 40px;">
+        <tr>
+            <td><img src="../../static/logo_2.jpg" alt=""></td>
+        </tr>
+    </table>
+</div>
+<div style="height: 40px;"></div>
+<div class="row mt-5" >
+    <div class="col-12 text-center">
+        <h1>로그인</h1>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-12">
+        {{error}}
+    </div>
+</div>
+{% if messages %}
+	{% for message in messages %}
+        <h1 id = 'r_message' style="display: none;">{{ message.message }}</h1>
+    {% endfor %}
+    <script>
+        alert($('#r_message').text());
+    </script>
+{% endif %}
+<div class="row mt-5">
+    
+    <div class="col-12">
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <!-- 원래 로그인 form-group이 있었던 곳 -->
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{field.id_for_label}}">{{field.label}}</label>
+                    <input type="{{field.field.widget.input_type}}" class="form-control" id="{{field.id_for_label}}" placeholder="{{field.label}}" name="{{field.name}}">
+                </div>
+
+                <!-- 에러 메시지가 있을 경우 출력 -->
+                {% if field.errors %}
+                    <span style="color:red">{{field.errors}}</span>
+                {% endif %}
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary" style="float: left;">로그인</button>
+        </form>
+        <button class="btn btn-primary" style="position: absolute; right: 12px;"><a href = '/'>메인으로</a></button>
+        <!-- <button class="btn btn-primary" style="position: absolute; right: 12px;"><a href = '/register'>임시생성</a></button> -->
+    </div>
+
+</div>
+
+
+{% endblock %}

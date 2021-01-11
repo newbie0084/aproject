@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .back_to_main{
+            margin: auto;
+        }
+        td{
+            border: 1px solid black;
+        }
+        .data_table{
+            border:solid;
+            padding: 0;
+            border: black solid;
+        }
+        .data_title{
+            width: 10em;
+            height: 50%;
+            padding: 0;
+        }
+        .data_title:hover {
+            background-color: burlywood;
+	        border-radius: 10px / 10px;
+        }
+        .data_title a{
+            font-size: 2em;
+            text-align: center;
+            margin:-0.3em;
+            padding:0.3em;
+            display: block;
+            text-decoration: none;
+            color: black;
+            cursor:pointer;
+        }
+        .td_1{
+            width: 5em;
+        }
+        .td_2{
+            width: 20em;
+        }
+        .td_3{
+            width: 5em;
+        }
+        .td_4{
+            width: 5em;
+        }
+        .td_5{
+            width: 5em;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" charset="euc-kr"></script>
+    <script>
+        // var i = 0;
+        
+        function enter(){
+            var code = document.getElementById('inputbarcode').value;
+
+            // var barlogs = document.getElementById('barlog').value;
+            // var num = i+'';
+
+            // barlogs += i + " : " + code + '\n';
+
+            // document.getElementById('barlog').value = barlogs;
+
+            // document.getElementById('inputbarcode').value = '';
+            // i += 1;
+
+            alert(code);
+            
+            $.ajax({
+                url: '/search_bar/',
+                method : 'POST',
+                data: {code:code},
+                beforeSend: function() {
+                // things to do before submit
+                },
+                success: function(response) {
+                    // window.location = '/view_n_page'
+                    location.reload();
+                }
+            });
+        };
+    </script>
+</head>
+<body>
+    <div class = 'input_bar' style="float: left;">
+        <table style="margin: auto;">
+            <tr>
+                <td><input id="inputbarcode" autofocus></td>
+                <td><button onclick="enter()">확인</button></td>
+            </tr>
+        </table>
+    </div>
+    <!-- <textarea name=""  id="barlog" cols="30" rows="10"></textarea> -->
+    <div class = 'bar_name' style="float: right;">
+        <table style="text-align: center; margin: auto;font-size: 1.7em;">
+            <tr>
+                <td style="width: 14em;">바코드</td>
+                <td style="width: 14em;">제품명</td>
+            </tr>
+            <tr>
+                <td><a id='b_code_td'></a>{{b_code}}</td>
+                <td>{{i_name}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="maintable">
+        <table class = 'notice_table' style="margin: auto;font-size: 1.5em;">
+            <tr style="text-align: center;">
+                <td class='td_1'>No.</td>
+                <td class='td_2'>재고번호</td>
+                <td class='td_3'>수량</td>
+                <td class='td_4'>위치</td>
+                <td class='td_5'>안전재고</td>
+            </tr>
+            {% csrf_token %}
+            {% for i in sn_list%}
+            {% with forloop.counter|cut:" " as index %}
+            <tr>
+                <td style="text-align: center;"><a class = {{index}} id = "q_list_t" style="margin: 0;">{{index}}</a></td>
+                <td><a class = {{index}} id = "sn_list_t" style="margin: 0;padding-left: 1em;">{{ sn_list|slice:index|last }}</a></td>
+                <td style="text-align: center;"><a class = {{index}} id = "q_list_t" style="margin: 0;">{{ q_list|slice:index|last }}</a></td>
+                <td style="text-align: center;"><a class = {{index}} id = "p_list_t" style="margin: 0;">{{ p_list|slice:index|last }}</a></td>
+                <td style="text-align: center;"><a class = {{index}} id = "save_list_t" style="margin: 0;">{{ save_list|slice:index|last }}</a></td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </table>
+    </div>
+    <br>
+    <br>
+    <br>
+
+    <table class="back_to_main"><tr class="data_table"><td class="data_title"><a href="/staff_main">메&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 인</a></td></tr></table>    
+</body>
+</html>

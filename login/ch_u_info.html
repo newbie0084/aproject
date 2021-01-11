@@ -1,0 +1,90 @@
+<!-- ch_pass.html -->
+{% extends "login/base.html" %}
+
+{% block contents %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function ch_info(){
+        var c_u_id = document.getElementById('c_u_id').value;
+        var i_uname = document.getElementById('i_uname').value;
+        var division_u = document.getElementById('division_u').value;
+        var rank_r = document.getElementById('rank_r').value;
+        var contect_n = document.getElementById('contect_n').value;
+        var mail_u = document.getElementById('mail_u').value;
+
+        if(i_uname==''){
+            alert('이름을 입력하십시오.');
+        }else if(division_u==''){
+            alert('소속을 입력하십시오.');
+        }else if(rank_r==''){
+            alert('직급을 입력하십시오.');
+        }else if(contect_n==''){
+            alert('연락처를 입력하십시오.');
+        }else if(mail_u==''){
+            alert('메일을 입력하십시오.');
+        }
+        else{
+            $.ajax({
+                url: '/ch_u_info/',
+                method : 'POST',
+                data: {c_u_id:c_u_id,i_uname: i_uname,division_u:division_u,rank_r:rank_r,contect_n:contect_n,mail_u:mail_u},
+                beforeSend: function() {
+                // things to do before submit
+                },
+                success: function(response) {
+                    alert('변경완료');
+                    window.location.href = '/staff_main'
+                }
+            });
+        }
+    };
+</script>
+<div class="row mt-5">
+    <div class="col-12 text-center">
+        <h1>정보 변경</h1>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-12">
+        {{error}}
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+            {% csrf_token %}
+            <h1>{{w_message}}</h1>
+            <hr>
+            <div class="form-group">
+                <label for="i_uname">아이디</label>
+                <input class="form-control" id="c_u_id" name="c_u_id" placeholder="이름">
+            </div>
+            <div class="form-group">
+                <label for="i_uname">이름</label>
+                <input class="form-control" id="i_uname" name="i_uname" placeholder="이름">
+            </div>
+            <div class="form-group">
+                <label for="re-division_u">소속</label>
+                <input class="form-control" id="division_u" name="division_u" placeholder="소속">
+            </div>
+            <div class="form-group">
+                <label for="rank_r">직급</label>
+                <input class="form-control" id="rank_r" name="rank_r" placeholder="직급">
+            </div>
+            <div class="form-group">
+                <label for="contect_n">연락처</label>
+                <input class="form-control" id="contect_n" name="contect_n" placeholder="연락처">
+            </div>
+            <div class="form-group">
+                <label for="mail_u">E-mail</label>
+                <input class="form-control" id="mail_u" name="mail_u" placeholder="E-mail">
+            </div>
+            <hr>
+            <button class="btn btn-primary" style="float: right;"  onclick="ch_info()">제출</button>
+            <a href = '/staff_main'>유저 페이지로 이동</a>
+    </div>
+</div>
+
+
+{% endblock %}

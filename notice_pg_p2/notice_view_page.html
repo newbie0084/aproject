@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항</title>
+    <style>
+        html,body{
+            margin:0;
+            height: 100%;
+            overflow: hidden;
+            background-color: cornflowerblue;
+        }
+        .main_container {
+            width:100%;
+            height:100%;
+        }
+        .main_div{
+            background-color: blue;
+        }
+        .navi ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+        .state{
+			list-style-type: none;
+            background-color: gold;
+        }
+        .state li{
+            float: left;
+        }
+        .navi li{
+            float: left;
+        }
+        .state ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+		/* li { float: left; } */
+        .nav-item {
+            padding: 1vw;
+            cursor: pointer; /*마우스 커서를 pointer 모양으로 함*/
+        }
+        .nav-item a {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            text-decoration: none; /*밑줄 없앰*/
+            color: white;
+            font-size: 1em;
+        }
+        .nav-item:nth-child(2) {
+            background-color: rgba(228, 207, 89, 0.76);
+	        border-radius: 10px / 10px;
+        }
+        .nav-item:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }.navi {
+            margin: 0; /*쓸 데 없는 공백 제거*/
+            padding: 0; /*쓸 데 없는 공백 제거*/
+            background-color: cornflowerblue;
+            /* float:left; */
+            border-bottom-width:thin;
+            border-bottom-color:rgba(25,80,100,0);
+            border-bottom:solid;
+        }.nav-container{
+            font-weight: bold;
+        }
+        li.pg_btn{
+            margin: 0;
+        }
+        tr,td{
+            border: 1px solid black;
+        }
+        .board{
+            background-color: rgb(169, 175, 253);
+            height: 60%;
+        }
+        .board p,a{
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 2em;
+        }
+        .board p a{
+            font-size: 1.5em;
+        }
+        .board table{
+            float: right;
+            margin-right: 1em;
+            text-align: center;
+            font-size: 1.4em;
+        }
+        .stock_list{
+            background-color: rgb(109, 143, 151);
+        }
+        .st_w_td {
+            width: 12em;
+        }
+        .state ul,li{
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .state a{
+            text-decoration: none;
+            color : black;
+        }
+        .pg_btn:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }
+        .st_id a{
+            margin: 0;
+            padding: 0;
+        }
+        .pg_btn a{
+            margin: 0;
+        }
+        .page_td{
+            border: none;
+        }
+        .page_button_table{
+            margin: auto;
+        }
+        .down_div{
+            background-color:  rgb(128, 128, 128);
+            height: 100em;
+            overflow: hidden;
+        }
+        .button_td_1{
+            width: 10em;
+            border: none;
+        }
+        .button_td_2{
+            width: 50em;
+            border: none;
+        }
+        .button_td_3{
+            width: 10em;
+            border: none;
+        }
+        .notice_data{
+            background-color: rgb(128, 128, 128);
+            height: 80%;
+            overflow:auto;
+        }
+        .notice_data_table{
+            text-align: center;
+            margin: auto;
+            font-size: 2em;
+        }
+        .notice_data_table input{
+            font-size: 1em;
+        }
+        .notice_data_table textarea{
+            font-size: 1em;
+        }
+        .input_td{
+            border: none;
+        }
+        .td_title{
+            width: 10em;
+        }
+        .td_t_i{
+            width: 30em;
+        }
+        .td_content{
+            width: 10em;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        // 공지 추가
+        function add_notice(){
+            var n_title = document.getElementById('n_title').value;
+            var n_w_name = document.getElementById('n_w_name').value;
+            var n_date = document.getElementById('n_date').value;
+            var n_content = document.getElementById('ta').value;
+            alert(n_date);
+            if(n_title==''){
+                alert('제목이 비어있습니다.');
+            }else if(n_content==''){
+                alert('내용이 비어있습니다.');
+            }else{
+                $.ajax({
+                    url: '/save_notice/',
+                    method : 'POST',
+                    data: {n_title:n_title,n_w_name:n_w_name,n_date:n_date,n_content:n_content},
+                    beforeSend: function() {
+                    // things to do before submit
+                    },
+                    success: function(response) {
+                        alert('추가완료');
+                        window.location='/notice_page';
+                    }   
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input id = 'u_id' style="display: none;" value={{l_id}}>
+        <input id = 'u_name' style="display: none;" value={{l_name}}>
+    </div>
+    <div class = 'main_container'>
+        <div class = 'navi'>
+            <ul class = 'nav-container'>
+                <li class = 'nav-item'><a href="/staff_main">메&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 인</a></li>
+                <li class = 'nav-item'><a href="/notice_page">공 지 사 항</a></li>
+                <li class = 'nav-item'><a href="/stock_produce_main">재 고(제 조)</a></li>
+            </ul>
+        </div>
+        <div class = 'state'>
+            <ul>
+                <li class = 'st_page'>&nbsp공 지 사 항</li>
+                <li class = 'pg_btn' style="float: right;"><a href="/logout">로그아웃&nbsp;</a></li>
+                <li class = 'st_id' style="float: right;"><a>{{l_id}}({{l_name}})님&nbsp;</a></li>
+            </ul>
+        </div>
+        <div class = 'notice_data'>
+            <table class = 'notice_data_table'>
+                <tr><td class='input_td' style="height: 2em;"></td></tr>
+                <tr>
+                    <td class='td_title'>제목</td>
+                    <td class='td_t_i' colspan="3">{{n_title}}</td>
+                </tr>
+                <tr>
+                    <td class='td_title'>작성자</td>
+                    <td class='td_content'>{{n_w_name}}</td>
+                    <td class='td_title'>작성일</td>
+                    <td class='td_content'>{{n_date}}</td>
+                    <input id = 'n_date' style="display: none;">
+                    
+                </tr>
+                
+                <tr>
+                    <td class='td_title'>내용</td>
+                    <td colspan="3">
+                        <pre style="margin-left: 1%;text-align: left;overflow: auto; width: 36em; word-wrap: break-word;white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-break:break-all;">{{n_content}}</pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class='down_div'>
+            <hr>
+            <div class = 'state'>
+                <ul>
+                    <li class = 'pg_btn' style="float: right;margin-left: 10px;"><a href="/notice_page">목록으로</a></li>
+                    
+                    <li class = 'pg_btn' style="float: right;"><a href="{{request.META.HTTP_REFERER}}">뒤로가기</a></li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>

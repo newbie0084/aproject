@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>원자재 등록</title>
+    <style>
+        html,body{
+            margin:0;
+            height: 100%;
+            overflow: hidden;
+            background-color: cornflowerblue;
+        }
+        .main_container {
+            width:100%;
+            height:100%;
+        }
+        .main_div{
+            background-color: blue;
+        }
+        .navi ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+        .state ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+		/* li { float: left; } */
+        .navi li{
+            float: left;
+        }
+        .nav-item {
+            padding: 1vw;
+            cursor: pointer; /*마우스 커서를 pointer 모양으로 함*/
+        }
+        .nav-item a {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            text-decoration: none; /*밑줄 없앰*/
+            color: white;
+            font-size: 1em;
+        }
+        .nav-item:nth-child(4) {
+            background-color: rgba(228, 207, 89, 0.76);
+	        border-radius: 10px / 10px;
+        }
+        .nav-item:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }.navi {
+            margin: 0; /*쓸 데 없는 공백 제거*/
+            padding: 0; /*쓸 데 없는 공백 제거*/
+            background-color: cornflowerblue;
+            /* float:left; */
+            border-bottom-width:thin;
+            border-bottom-color:rgba(25,80,100,0);
+            border-bottom:solid;
+        }.nav-container{
+            font-weight: bold;
+        }
+        .state{
+			list-style-type: none;
+            background-color: gold;
+        }
+        .state li{
+            float: left;
+        }
+        .state ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+        .state ul,li{
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .state a{
+            text-decoration: none;
+            color : black;
+        }
+        .pg_btn:nth-child(4) {
+            background-color: blueviolet;
+	        border-radius: 10px / 10px;
+        }
+        .pg_btn:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }
+        .st_id a{
+            margin: 0;
+            padding: 0;
+        }
+        .user_list_table tr,td{
+            border: 1px solid black;
+        }
+        .board{
+            float: left;
+            background-color: rgb(169, 175, 253);
+            height: 75vh;
+            width: 50%;
+            overflow:auto;
+        }
+        .state ul,li{
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .user_list{
+            float: right;
+            height: 75vh;
+            width: 50%;
+            background-color: rgb(216, 185, 191);
+            overflow:auto;
+        }
+        .main_div{
+            width: 100%;
+        }
+        .board p{
+            font-size: 1.8em;
+            padding-top: 5vh;
+        }
+        .board input{
+            font-size: 1em;
+            width: 12em;
+        }
+        .input_td{
+            border: none;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        // 데이터 표시
+        function show_data(num){
+            var i_idx = $('a#i_idx_t.'+num).text();
+            var i_name = $('a#i_name_t.'+num).text();
+            var c_name = $('a#c_name_t.'+num).text();
+            var i_sp = $('a#i_sp_t.'+num).text();
+            var i_vol = $('a#i_vol_t.'+num).text();
+            var i_cost = $('a#i_cost_t.'+num).text();
+            var s_save = $('a#s_save_t.'+num).text();
+            var s_use = $('a#s_use_t.'+num).text();
+            var i_text = $('a#i_text_t.'+num).text();
+            
+            document.getElementById('i_name_i').value = i_name;
+            document.getElementById('c_name_i').value = c_name;
+            document.getElementById('i_sp_i').value = i_sp;
+            document.getElementById('i_vol_i').value = i_vol;
+            document.getElementById('i_cost_i').value = i_cost;
+            document.getElementById('s_save_i').value = s_save;
+            document.getElementById('s_use_i').value = s_use;
+            document.getElementById('i_text_i').value = i_text;
+
+            // 버튼 onclick 다시부여
+            $(".save_btn").removeAttr("onclick");
+            $(".save_btn").attr("onclick","replace_d("+i_idx+");");
+            $('.save_btn').text('수정');
+            $(".del_btn").removeAttr("onclick");
+            $(".del_btn").removeAttr("style");
+            $(".del_btn").attr("style","font-size: 1.2em;margin-left:1em;");
+            $(".del_btn").attr("onclick","del("+i_idx+");");
+
+        }
+
+        // 데이터 저장
+        function save_data(){
+            var i_name = document.getElementById('i_name_i').value;
+            var c_name = document.getElementById('c_name_i').value;
+            var i_sp = document.getElementById('i_sp_i').value;
+            var i_vol = document.getElementById('i_vol_i').value;
+            var i_cost = document.getElementById('i_cost_i').value;
+            var s_save = document.getElementById('s_save_i').value;
+            var s_use = document.getElementById('s_use_i').value;
+            var i_text = document.getElementById('i_text_i').value;
+
+            
+            if(i_name==''){
+                alert('제품명이 비어있습니다.');
+            }else if(c_name==''){
+                alert('업체명이 비어있습니다.');
+            }else if(i_sp==''){
+                alert('사양이 비어있습니다.');
+            }else if(i_vol==''){
+                alert('용량이 비어있습니다.');
+            }else if(i_cost==''){
+                alert('단가가 비어있습니다.');
+            }else if(s_save==''){
+                alert('안전재고가 비어있습니다.');
+            }else if(s_use==''){
+                alert('가용재고가 비어있습니다.');
+            }else{
+                $.ajax({
+                    url: '/add_raw_d/',
+                    method : 'POST',
+                    data: {i_name:i_name,c_name:c_name,i_sp:i_sp,i_vol:i_vol,i_cost:i_cost,s_save:s_save,s_use:s_use,i_text:i_text},
+                    beforeSend: function() {
+                    // things to do before submit
+                    },
+                    success: function(response) {
+                        alert('추가완료');
+                        location.reload();
+                    }   
+                });
+            }
+            
+        }
+        
+        // 업체 수정
+        function replace_d(num){
+            var idx = num;
+            var i_name = document.getElementById('i_name_i').value;
+            var c_name = document.getElementById('c_name_i').value;
+            var i_sp = document.getElementById('i_sp_i').value;
+            var i_vol = document.getElementById('i_vol_i').value;
+            var i_cost = document.getElementById('i_cost_i').value;
+            var s_save = document.getElementById('s_save_i').value;
+            var s_use = document.getElementById('s_use_i').value;
+            var i_text = document.getElementById('i_text_i').value;
+
+            
+            if(i_name==''){
+                alert('제품명이 비어있습니다.');
+            }else if(c_name==''){
+                alert('업체명이 비어있습니다.');
+            }else if(i_sp==''){
+                alert('사양이 비어있습니다.');
+            }else if(i_vol==''){
+                alert('용량이 비어있습니다.');
+            }else if(i_cost==''){
+                alert('단가가 비어있습니다.');
+            }else if(s_save==''){
+                alert('안전재고가 비어있습니다.');
+            }else if(s_use==''){
+                alert('가용재고가 비어있습니다.');
+            }else{
+                $.ajax({
+                    url: '/re_raw_d/',
+                    method : 'POST',
+                    data: {idx:idx,i_name:i_name,c_name:c_name,i_sp:i_sp,i_vol:i_vol,i_cost:i_cost,s_save:s_save,s_use:s_use,i_text:i_text},
+                    beforeSend: function() {
+                    // things to do before submit
+                    },
+                    success: function(response) {
+                        alert('수정완료');
+                        location.reload();
+                    }   
+                });
+            }
+        }
+        
+        // 삭제
+        function del(num){
+            if (confirm("데이터를 삭제합니다. 계속합니까?")) {
+                $.ajax({
+                    url: '/del_raw_d/',
+                    method : 'POST',
+                    data: {num:num},
+                    beforeSend: function() {
+                    // things to do before submit
+                    },
+                    success: function(response) {
+                        alert('삭제완료');
+                        location.reload();
+                    }   
+                });
+            } else {
+                alert("동작을 취소했습니다.");
+            };
+        }
+    </script>
+</head>
+<body>
+    <div class = 'main_container'>
+        <div class = 'navi'>
+            <ul class = 'nav-container'>
+                <li class = 'nav-item'><a href="/staff_main">메&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 인</a></li>
+                <li class = 'nav-item'><a href="/notice_page">공 지 사 항</a></li>
+                <li class = 'nav-item'><a href="/create_id_page">아이디 생성</a></li>
+                <li class = 'nav-item'><a href="/add_item_main">자 재 등 록</a></li>
+                <li class = 'nav-item'><a href="/stock_reblocell_main">재 고(본 사)</a></li>
+                <li class = 'nav-item'><a href="/stock_produce_main">재 고(제 조)</a></li>
+                <li class = 'nav-item'><a href="/stock_Asthetic_main">재 고(에 스)</a></li>
+                <li class = 'nav-item'><a href="/order_i_main">주 문 발 주</a></li>
+            </ul>
+        </div>
+        <div class = 'state'>
+            <ul>
+                <li class = 'st_page'>&nbsp;&nbsp;자&nbsp;재&nbsp;||</li>
+                <li class = 'pg_btn'>&nbsp;<a href="/add_comp_i_page">업체 등록</a> |</li>
+                <li class = 'pg_btn'>&nbsp;<a href="/add_sub_i_page">부자재 등록</a> |</li>
+                <li class = 'pg_btn'>&nbsp;<a href="/add_raw_i_page">원자재  등록</a> |</li>
+                <li class = 'pg_btn'>&nbsp;<a href="/add_end_i_page">완제품  등록</a> |</li>
+                <li class = 'pg_btn' style="float: right;"><a href="/logout">로그아웃&nbsp;</a></li>
+                <li class = 'st_id' style="float: right;"><a>{{l_id}}({{l_name}})님&nbsp;</a></li>
+            </ul>
+        </div>
+        <div class = 'main_div'>
+            <div class = 'board'>
+                <br>
+                <p style="margin:auto; text-align: center; font-weight: bolder;">입 력 사 항</p>
+                <br>
+                <br>
+                <table class = 'input_table' style="margin: auto; font-size: 1.5em;">
+                    <tr>
+                        <td class='input_td'>제&nbsp;&nbsp; 품&nbsp;&nbsp; 명 : <input id='i_name_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>업&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 체 : <input id='c_name_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>사&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 양 : <input id='i_sp_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>용&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 량 : <input id='i_vol_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>단&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 가 : <input id='i_cost_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>안 전 재 고 : <input id='s_save_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>가 용 재 고 : <input id='s_use_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 0.5em;"></td></tr>
+                    <tr>
+                        <td class='input_td'>비&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 고 : <input id='i_text_i'></td>
+                    </tr>
+                    <tr><td class='input_td' style="height: 1.5em;"></td></tr>
+                    <tr><td class='input_td'style="text-align:center;"><button class = 'save_btn' style="font-size: 1.2em;" onclick="save_data()">원자재 등록</button><button class = 'del_btn' style="font-size: 1.2em; display: none;" onclick="">삭제</button></td></tr>
+                </table>
+            </div>
+            <div class = 'user_list'>
+                <table class = 'user_list_table' style="margin: auto; width: 80%; text-align: center;">
+                    <tr><td class='input_td' style="height: 1em;"></td></tr>
+                    <tr>
+                        <td colspan="5" style="font-size: 1.5em;font-weight: bolder;">원자재 목록</td>
+                    </tr>
+                    <tr>
+                        <td>No.</td>
+                        <td>이름</td>
+                        <td>업체</td>
+                        <td>사양</td>
+                        <td>단가</td>
+                    </tr>
+                    {% csrf_token %}
+                    {% for i in index_list%}
+                    {% with forloop.counter|cut:" " as index %}
+                    <tr style="text-align: center;">
+                        <a class = {{index}} id = "i_idx_t" style="display: none;">{{i}}</a>
+                        <a class = {{index}} id = "i_vol_t" style="display: none;">{{ i_vol_list |slice:index|last }}</a>
+                        <a class = {{index}} id = "s_save_t" style="display: none;">{{ s_save_list |slice:index|last }}</a>
+                        <a class = {{index}} id = "s_use_t" style="display: none;">{{ s_use_list |slice:index|last }}</a>
+                        <a class = {{index}} id = "i_text_t" style="display: none;">{{ i_text_list |slice:index|last }}</a>
+                        <td><button id = {{index}} name = "number" type="button" style="font-size: 18px; width: 40px;height: 32px;" onclick="show_data(this.id)">{{index}}</button></td>
+                        <td><a class = {{index}} id = "i_name_t" style="margin: 0;">{{ i_name_list|slice:index|last }}</a></td>
+                        <td><a class = {{index}} id = "c_name_t" style="margin: 0;">{{ c_name_list|slice:index|last }}</a></td>
+                        <td><a class = {{index}} id = "i_sp_t" style="margin: 0;">{{ i_sp_list|slice:index|last }}</a></td>
+                        <td><a class = {{index}} id = "i_cost_t" style="margin: 0;">{{ i_cost_list|slice:index|last }}</a></td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>에스테틱 부자재 재고</title>
+    <style>
+        html,body{
+            margin:0;
+            height: 100%;
+            overflow: hidden;
+            background-color: cornflowerblue;
+        }
+        .main_container {
+            width:100%;
+            height:100%;
+        }
+        .main_div{
+            background-color: blue;
+        }
+        .navi ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+        .state ul {
+            padding-left: 0;
+			list-style-type: none;
+			overflow: hidden;
+		}
+		/* li { float: left; } */
+        .navi li{
+            float: left;
+        }
+        .nav-item {
+            padding: 1vw;
+            cursor: pointer; /*마우스 커서를 pointer 모양으로 함*/
+        }
+        .nav-item a {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            text-decoration: none; /*밑줄 없앰*/
+            color: white;
+            font-size: 1em;
+        }
+        .nav-item:nth-child(8) {
+            background-color: rgba(228, 207, 89, 0.76);
+	        border-radius: 10px / 10px;
+        }
+        .nav-item:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }.navi {
+            margin: 0; /*쓸 데 없는 공백 제거*/
+            padding: 0; /*쓸 데 없는 공백 제거*/
+            background-color: cornflowerblue;
+            /* float:left; */
+            border-bottom-width:thin;
+            border-bottom-color:rgba(25,80,100,0);
+            border-bottom:solid;
+        }.nav-container{
+            font-weight: bold;
+        }
+        .state{
+			list-style-type: none;
+            background-color: gold;
+        }
+        .state li{
+            float: left;
+        }
+        .st_id a{
+            margin: 0;
+            padding: 0;
+        }
+        tr,td{
+            border: 1px solid black;
+        }
+        .board{
+            background-color: rgb(169, 175, 253);
+            height: 50%;
+            overflow:auto;
+        }
+        .board p,a{
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 2em;
+        }
+        .board p a{
+            font-size: 1.5em;
+        }
+        .st_w_td {
+            width: 12em;
+        }
+        .state ul,li{
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .notice_list{
+            background-color: rgba(216, 185, 191);
+            height: 44vh;
+            overflow:auto;
+        }
+        .td_1{
+            width: 15em;
+        }
+        .td_2{
+            width: 20em;
+        }
+        .td_3{
+            width: 15em;
+        }
+        .td_4{
+            width: 10em;
+        }
+        .td_5{
+            width: 10em;
+        }
+        .td_6{
+            width: 15em;
+        }
+        .td_7{
+            width: 15em;
+        }
+        .notice_table{
+            font-size: 1.3em;
+            text-align: center;
+        }
+        .input_td{
+            border: none;
+        }
+        .input_table{
+            margin: auto;
+        }
+        .input_table_2{
+            margin: auto;
+        }
+        .board input{
+            font-size: 1em;
+            width: 50%;
+        }
+        .state a{
+            text-decoration: none;
+            color : black;
+        }
+        .pg_btn:nth-child(2) {
+            background-color: blueviolet;
+	        border-radius: 10px / 10px;
+        }
+        .pg_btn:hover {
+            background-color: grey;
+	        border-radius: 10px / 10px;
+        }
+        .pg_btn a{
+            margin: 0;
+        }
+        #height{
+            resize:vertical;
+        }
+        .a_n_s_q{
+            margin: 0;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function enter(){
+            var code = document.getElementById('inputbarcode').value;
+
+            // var barlogs = document.getElementById('barlog').value;
+            // var num = i+'';
+
+            // barlogs += i + " : " + code + '\n';
+
+            // document.getElementById('barlog').value = barlogs;
+
+            // document.getElementById('inputbarcode').value = '';
+            // i += 1;
+
+            alert(code);
+            
+            $.ajax({
+                url: '/search_bar/',
+                method : 'POST',
+                data: {code:code},
+                beforeSend: function() {
+                // things to do before submit
+                },
+                success: function(response) {
+                    // window.location = '/view_n_page'
+                    location.reload();
+                }
+            });
+        };
+        function enterkey() {
+            if (window.event.keyCode == 13) {
+    
+                // 엔터키가 눌렸을 때 실행할 내용
+                enter();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input id = 'u_id' style="display: none;" value={{l_id}}>
+        <input id = 'u_name' style="display: none;" value={{l_name}}>
+
+        <input id = 'n_s_n' style="display: none;">
+        <input id = 'n_i_s_q' style="display: none;">
+        <input id = 'n_idx' style="display: none;">
+        <input id = 's_p_n' style="display: none;">
+
+        <input id = 's_s_save_d' style="display: none;">
+        <input id = 's_s_save_d_2' style="display: none;">
+        <input id = 're_s_save_d' style="display: none;">
+        
+        {% for i in s_i_name_list%}
+        {% with forloop.counter|cut:" " as index %}
+            <p id = "s_i_sp" class={{index}} style="display: none;">{{ s_i_sp_list|slice:index|last }}</p>
+            <p id = "s_b_code" class={{index}} style="display: none;">{{ s_b_code_list|slice:index|last }}</p>
+            <p id = "s_c_name" class={{index}} style="display: none;">{{ s_c_name_list|slice:index|last }}</p>
+            <p id = "s_i_vol" class={{index}} style="display: none;">{{ s_i_vol_list|slice:index|last }}</p>
+            <p id = "s_i_cost" class={{index}} style="display: none;">{{ s_i_cost_list|slice:index|last }}</p>
+            <p id = "s_s_save" class={{index}} style="display: none;">{{ s_s_save_list|slice:index|last }}</p>
+        {% endwith %}
+        {% endfor %}
+    </div>
+    <div class = 'main_container'>
+        <div class = 'navi'>
+            <ul class = 'nav-container'>
+                <li class = 'nav-item'><a href="/staff_main">메&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 인</a></li>
+                <li class = 'nav-item'><a href="/notice_page">공 지 사 항</a></li>
+                <li class = 'nav-item'><a href="/stock_reblocell_main">재 고(본 사)</a></li>
+                <li class = 'nav-item'><a href="/stock_produce_main">재 고(제 조)</a></li>
+                <li class = 'nav-item'><a href="/stock_Asthetic_main">재 고(에 스)</a></li>
+                <li class = 'nav-item'><a href="/order_rb_main">납 품 관 리</a></li>
+                <li class = 'nav-item'><a href="/bar_test_page">재 고 조 회</a></li>
+            </ul>
+        </div>
+        <div class = 'state'>
+            <ul>
+                <li class = 'st_page'>&nbsp;&nbsp;재&nbsp;고&nbsp;&nbsp;||</li>
+                <li class = 'pg_btn' style="float: right;"><a href="/logout">로그아웃&nbsp;</a></li>
+                <li class = 'st_id' style="float: right;"><a>{{l_id}}({{l_name}})님&nbsp;</a></li>
+            </ul>
+        </div>
+        <div class = 'board' id = 'height'>
+            <p style="margin:auto; font-weight: bolder;font-size: 2em;">&nbsp;&nbsp;재고조회</p>
+            <br>
+            <div class = 'input_bar' style="float: left;">
+                <table style="margin: auto;">
+                    <tr>
+                        <td><input id="inputbarcode" onkeyup="enterkey();" autofocus></td>
+                        <td><button onclick="enter()">확인</button></td>
+                    </tr>
+                </table>
+            </div>
+            <!-- <textarea name=""  id="barlog" cols="30" rows="10"></textarea> -->
+            <div class = 'bar_name' style="float: right;">
+                <table style="text-align: center; margin: auto;font-size: 1.7em;">
+                    <tr>
+                        <td style="width: 14em;">바코드</td>
+                        <td style="width: 14em;">제품명</td>
+                    </tr>
+                    <tr>
+                        <td><a id='b_code_td'></a>{{b_code}}</td>
+                        <td>{{i_name}}</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="maintable">
+                <table class = 'notice_table' style="margin: auto;font-size: 1.5em;">
+                    <tr style="text-align: center;">
+                        <td class='td_1'>No.</td>
+                        <td class='td_2'>재고번호</td>
+                        <td class='td_3'>수량</td>
+                        <td class='td_4'>위치</td>
+                        <td class='td_5'>안전재고</td>
+                    </tr>
+                    {% csrf_token %}
+                    {% for i in sn_list%}
+                    {% with forloop.counter|cut:" " as index %}
+                    <tr>
+                        <td style="text-align: center;"><a class = {{index}} id = "q_list_t" style="margin: 0;">{{index}}</a></td>
+                        <td><a class = {{index}} id = "sn_list_t" style="margin: 0;padding-left: 1em;">{{ sn_list|slice:index|last }}</a></td>
+                        <td style="text-align: center;"><a class = {{index}} id = "q_list_t" style="margin: 0;">{{ q_list|slice:index|last }}</a></td>
+                        <td style="text-align: center;"><a class = {{index}} id = "p_list_t" style="margin: 0;">{{ p_list|slice:index|last }}</a></td>
+                        <td style="text-align: center;"><a class = {{index}} id = "save_list_t" style="margin: 0;">{{ save_list|slice:index|last }}</a></td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>
